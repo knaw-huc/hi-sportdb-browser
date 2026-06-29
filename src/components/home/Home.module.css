@@ -4,3 +4,12 @@
     width: 80%;
     min-height: 400px;
 }
+
+.info {
+    padding: 8px 12px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+    font: 14px/1.4 system-ui, sans-serif;
+    max-width: 220px;
+}
