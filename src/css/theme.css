@@ -1,0 +1,11 @@
+html {
+    --color-brand: #73a1bf;
+    --color-brand-500: #73a1bf;
+    --color-header-text: #254E6E;
+    --color-support-001: #73a1bf;
+    --color-support-002: #73a1bf;
+    --color-support-003: #73a1bf;
+    --default-font-family: sans-serif;
+    --color-dataset-800: #1D5353;
+    --content-max-width: 70rem;
+}

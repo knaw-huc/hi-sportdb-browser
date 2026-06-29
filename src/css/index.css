@@ -1,0 +1,90 @@
+/* Override CSS based on selectors using substrings - this is something we need to look at for future projects */
+/* Header and top-level nav */
+header > [class*="_content_"] {
+    justify-content: flex-between;
+    max-width: none;
+    margin-inline: 0;
+}
+
+header [class*="_navigation_"] {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+header [class*="_navigation_"] a {
+    color: #ffffff;
+    background-color: #4B718E;
+}
+
+div [class*="_branding_"] {
+    background-color: #094870;
+    color: #ffffff;
+    align-self: stretch;            /* Full height */
+    margin-block: -0.5rem;          /* Cancel vertical padding to reach top/bottom edges */
+    padding-block: 0.5rem;          /* Restore inner spacing so the text stays centered */
+    margin-left: -1rem;             /* Cancel left padding to reach the left edge */
+    padding-left: 1rem;             /* keep the text off the edge */
+    display: flex;
+    align-items: center;
+}
+
+header [class*="_navigation_"] > :last-child {
+    margin-left: auto;
+}
+
+/* Bypass result card — scoped to Panoptes ResultCard (has _link_), not dataset cards */
+[class*="_card_"]:has([class*="_link_"]) {
+    list-style: none;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_link_"] {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_title_"] h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1d3b44;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_description_"] {
+    color: #374151;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_description_"] em,
+[class*="_card_"]:has([class*="_link_"]) [class*="_description_"] mark {
+    background-color: #d4e7db;
+    color: #1d3b44;
+    padding: 0.05em 0.3em;
+    border-radius: 4px;
+    font-style: normal;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_tags_"] {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-self: flex-start;
+    gap: 0.5rem;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_tag_"] {
+    border: 1px solid #cbd5d1;
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.8rem;
+    color: #4b5d5a;
+    background-color: #ffffff;
+}
