@@ -1,8 +1,6 @@
 import {createPanoptesRoot, PanoptesRouterProvider} from "@knaw-huc/panoptes-react";
 import {panoptesBlocksLibrary} from "@knaw-huc/panoptes-react-blocks";
 import {createTranslate} from "./i18n/i18n.ts";
-import {createRoute} from "@tanstack/react-router";
-import Home from "./components/home/Home.tsx";
 import '@knaw-huc/panoptes-react/style.css';
 import '@knaw-huc/panoptes-react-blocks/style.css';
 import './css/theme.css';
@@ -20,6 +18,13 @@ const getVar = (envVariable: string): string | undefined =>
         ? (envVariable.slice(1) in import.meta.env ? import.meta.env[envVariable.slice(1)] : undefined)
         : envVariable;
 
+if (window.location.pathname === '/') {
+    const dataset = getVar(panoptesDataset);
+    const searchPath = getVar(panoptesSearchPath);
+    const target = searchPath?.replace('$dataset', dataset ?? '') ?? `/${dataset}/search`;
+    window.location.replace(target);
+}
+
 const root = createPanoptesRoot(document.getElementById('root')!, {
     url: getVar(panoptesUrl),
     isEmbedded: getVar(panoptesIsEmbedded) === 'true',
@@ -32,17 +37,17 @@ const root = createPanoptesRoot(document.getElementById('root')!, {
     navItems: [
         {
             "label": "hi-sportdb-home",
-            "href": "/",
+            "href": "/sport/search",
             "labelKey": "hi-sportdb-browser.pages.home"
         }
     ],
-    routes: (rootRoute) => [
+    /*routes: (rootRoute) => [
         createRoute({
             path: '/',
             getParentRoute: () => rootRoute,
             component: Home
         })
-    ],
+    ],*/
     branding: 'SportDB',
     resultCardRenderer: (result, link) => <SportResultCard {...result} link={link}/>,
 });

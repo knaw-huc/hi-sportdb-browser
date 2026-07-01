@@ -27,5 +27,30 @@
   "panoptes.no": "Nee",
   "panoptes.mainSiteNavigation": "Hoofdnavigatie",
 
-  "hi-sportdb-browser.pages.home": "Home"
+  "hi-sportdb-browser.pages.home": "Home",
+
+  "screens.vereniging-detail": "Verenigingsgegevens",
+  "screens.vereniging-detail.vereniging": "Vereniging",
+  "screens.vereniging-detail.vereniging.naam": "Naam",
+  "screens.vereniging-detail.vereniging.naam.info": "",
+  "screens.vereniging-detail.vereniging.gemeente1984": "Plaats",
+  "screens.vereniging-detail.vereniging.gemeente1984.info": "",
+  "screens.vereniging-detail.vereniging.provincie": "Provincie",
+  "screens.vereniging-detail.vereniging.provincie.info": "",
+  "screens.vereniging-detail.vereniging.doelstelling": "Doelstelling",
+  "screens.vereniging-detail.vereniging.doelstelling.info": "",
+  "screens.vereniging-detail.vereniging.levensbeschouwing": "Levensbeschouwing",
+  "screens.vereniging-detail.vereniging.levensbeschouwing.info": "",
+  "screens.vereniging-detail.vereniging.beginDatumJaar": "Startdatum",
+  "screens.vereniging-detail.vereniging.beginDatumJaar.info": "",
+  "screens.vereniging-detail.vereniging.werkingsGebied": "Werkingsgebied",
+  "screens.vereniging-detail.vereniging.werkingsGebied.info": "",
+  "screens.vereniging-detail.vereniging.speeldag": "Speeldag",
+  "screens.vereniging-detail.vereniging.speeldag.info": "",
+  "screens.vereniging-detail.vereniging.koninklijkBesluit": "Koninklijk besluit",
+  "screens.vereniging-detail.vereniging.koninklijkBesluit.info": "",
+  "screens.vereniging-detail.vereniging.verantwoordingGegevens": "Verantwoording gegevens",
+  "screens.vereniging-detail.vereniging.verantwoordingGegevens.info": "",
+  "screens.vereniging-detail.vereniging.opmerkingen": "Opmerkingen",
+  "screens.vereniging-detail.vereniging.opmerkingen.info": ""
 }
