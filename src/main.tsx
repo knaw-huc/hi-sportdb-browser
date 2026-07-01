@@ -7,6 +7,7 @@ import '@knaw-huc/panoptes-react/style.css';
 import '@knaw-huc/panoptes-react-blocks/style.css';
 import './css/theme.css';
 import './css/index.css';
+import SportResultCard from "./components/results/SportResultCard.tsx";
 
 const panoptesUrl = '$VITE_PANOPTES_URL';
 const panoptesIsEmbedded = '$VITE_PANOPTES_IS_EMBEDDED';
@@ -43,5 +44,6 @@ const root = createPanoptesRoot(document.getElementById('root')!, {
         })
     ],
     branding: 'SportDB',
+    resultCardRenderer: (result, link) => <SportResultCard {...result} link={link}/>,
 });
 root.render(<PanoptesRouterProvider/>);
