@@ -1,11 +1,11 @@
 import {createPanoptesRoot, PanoptesRouterProvider} from "@knaw-huc/panoptes-react";
 import {panoptesBlocksLibrary} from "@knaw-huc/panoptes-react-blocks";
 import {createTranslate} from "./i18n/i18n.ts";
+import SportResultCard, {type SportSearchResultItem} from "./components/results/SportResultCard.tsx";
 import '@knaw-huc/panoptes-react/style.css';
 import '@knaw-huc/panoptes-react-blocks/style.css';
 import './css/theme.css';
 import './css/index.css';
-import SportResultCard from "./components/results/SportResultCard.tsx";
 
 const panoptesUrl = '$VITE_PANOPTES_URL';
 const panoptesIsEmbedded = '$VITE_PANOPTES_IS_EMBEDDED';
@@ -25,7 +25,7 @@ if (window.location.pathname === '/') {
     window.location.replace(target);
 }
 
-const root = createPanoptesRoot(document.getElementById('root')!, {
+const root = createPanoptesRoot<SportSearchResultItem>(document.getElementById('root')!, {
     url: getVar(panoptesUrl),
     isEmbedded: getVar(panoptesIsEmbedded) === 'true',
     searchPath: getVar(panoptesSearchPath),

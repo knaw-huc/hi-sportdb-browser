@@ -33,7 +33,7 @@ header [class*="_navigation_"] > :last-child {
     margin-left: auto;
 }
 
-/* Bypass result card — scoped to Panoptes ResultCard (has _link_), not dataset cards */
+/* Result card — scoped to Panoptes ResultCard (has _link_), not dataset cards */
 [class*="_card_"]:has([class*="_link_"]) {
     list-style: none;
     background-color: #ffffff;
@@ -61,6 +61,7 @@ header [class*="_navigation_"] > :last-child {
     color: #374151;
     font-size: 0.95rem;
     line-height: 1.5;
+    grid-area: unset;
 }
 
 [class*="_card_"]:has([class*="_link_"]) [class*="_description_"] em,

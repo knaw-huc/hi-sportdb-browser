@@ -1,19 +1,30 @@
 import {ResultCard, type ResultCardProps} from "@knaw-huc/panoptes-react";
 
-export interface SportResultCardProps extends Partial<ResultCardProps> {
+export interface SportSearchResultItem {
     id: string;
     title: string;
+    description?: string;
+    tags?: string[];
+    sport: string;
+    place: string;
+    province: string;
+    philosophy: string;
+    startDateYear: string;
+}
+
+export interface SportResultCardProps extends SportSearchResultItem {
     link: string;
 }
 
 export default function SportResultCard(props: SportResultCardProps) {
-    const { title , ...rest } = props as ResultCardProps;
+    const description = [props.place, props.province, props.sport, props.startDateYear, props.philosophy]
+                                .filter((v) => v !== null && v !== '').join(' - ');
     const resultCardProps: ResultCardProps = {
-        ...rest,
-        title,
+        title: props.title,
+        link: props.link,
+        description,
     };
-
     return (
-        <ResultCard {...resultCardProps} link={props.link} />
+        <ResultCard {...resultCardProps} />
     );
 }
