@@ -1,7 +1,7 @@
 {
   "name": "hi-sportdb-browser",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@knaw-huc/panoptes-react": "^0.0.8",
+    "@knaw-huc/panoptes-react": "^0.0.11",
     "@knaw-huc/panoptes-react-blocks": "^0.0.12",
     "i18next": "^26.3.3",
     "leaflet": "^1.9.4",
