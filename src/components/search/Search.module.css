@@ -1,0 +1,39 @@
+.search {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    max-width: 1300px;
+    height: 100%;
+    margin-top: 2rem;
+}
+
+.facets {
+    padding-inline: 1rem;
+    width: 100%;
+    padding-bottom: 1.5rem;
+}
+
+.results {
+    padding-inline: 1rem;
+    flex-grow: 1;
+    padding-bottom: 5rem;
+}
+
+@media (width >= 64rem) {
+    .search {
+        flex-direction: row;
+        margin-bottom: 4rem;
+    }
+
+    .facets {
+        width: fit-content;
+        min-width: fit-content;
+    }
+}
+
+@media (width >= 80rem) {
+    .search {
+        gap: 2.5rem;
+    }
+}

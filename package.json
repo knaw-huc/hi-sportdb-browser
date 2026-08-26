@@ -1,7 +1,7 @@
 {
   "name": "hi-sportdb-browser",
-  "private": true,
-  "version": "0.0.2",
+  "private": false,
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,12 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@knaw-huc/panoptes-react": "^0.0.11",
+    "@knaw-huc/faceted-search-react": "^0.0.21",
+    "@knaw-huc/panoptes-react": "^0.0.12",
     "@knaw-huc/panoptes-react-blocks": "^0.0.12",
+    "@tanstack/react-query": "^5.101.2",
+    "@tanstack/react-router": "^1.170.16",
     "i18next": "^26.3.3",
     "leaflet": "^1.9.4",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

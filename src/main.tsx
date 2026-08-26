@@ -2,12 +2,11 @@ import {createPanoptesRoot, PanoptesRouterProvider} from "@knaw-huc/panoptes-rea
 import {panoptesBlocksLibrary} from "@knaw-huc/panoptes-react-blocks";
 import {createTranslate} from "./i18n/i18n.ts";
 import SportResultCard, {type SportSearchResultItem} from "./components/results/SportResultCard.tsx";
+import Search from "./components/search/Search.tsx";
 import '@knaw-huc/panoptes-react/style.css';
 import '@knaw-huc/panoptes-react-blocks/style.css';
 import './css/theme.css';
 import './css/index.css';
-import Home from "./components/home/Home.tsx";
-import {createRoute} from "@tanstack/react-router";
 
 
 const panoptesUrl = '$VITE_PANOPTES_URL';
@@ -37,14 +36,8 @@ const root = createPanoptesRoot<SportSearchResultItem>(document.getElementById('
             "labelKey": "hi-sportdb-browser.pages.home"
         }
     ],
-    routes: (rootRoute) => [
-        createRoute({
-            path: '/',
-            getParentRoute: () => rootRoute,
-            component: Home
-        })
-    ],
     branding: 'SportDB',
+    searchComponent: Search,
     resultCardRenderer: (result, link) => <SportResultCard {...result} link={link}/>,
 });
 root.render(<PanoptesRouterProvider/>);
