@@ -10,28 +10,92 @@ import {MUNICIPALITY_FACET_KEY} from "./fetchCounts.ts";
 
 const NETHERLANDS: L.LatLngBoundsLiteral = [[50.7, 3.3], [53.6, 7.3]];
 
-// Buckets rather than a continuous ramp: counts run from 1 to ~2000 and a few
-// cities would otherwise flatten the rest of the country into one shade.
-const BUCKETS = [
-    {min: 101, color: '#094870', labelKey: 'gemeenteMap.legend.101'},
-    {min: 26, color: '#3d76a3', labelKey: 'gemeenteMap.legend.26'},
-    {min: 11, color: '#6699c0', labelKey: 'gemeenteMap.legend.11'},
-    {min: 6, color: '#8fb5d3', labelKey: 'gemeenteMap.legend.6'},
-    {min: 3, color: '#b7d0e3', labelKey: 'gemeenteMap.legend.3'},
-    {min: 1, color: '#dce9f2', labelKey: 'gemeenteMap.legend.1'},
-];
+// RAMP is an array of hex colors representing the buckets, e.g., ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c']
+const RAMP = ['#dce9f2', '#b7d0e3', '#8fb5d3', '#6699c0', '#3d76a3', '#094870'];
 const EMPTY_COLOR = '#f2f2f2';
 const SELECTED_COLOR = '#c1440e';
-
 const MIN_BOX_PIXELS = 8;
 
-function colorFor(count: number): string {
-    return BUCKETS.find((bucket) => count >= bucket.min)?.color ?? EMPTY_COLOR;
+interface Bucket {
+    min: number;
+    max?: number;
+    color: string;
 }
 
-function styleFor(count: number, isSelected: boolean): L.PathOptions {
+const snap = (val: number) => Math.round(val);
+
+function bucketsFor(counts: number[]): Bucket[] {
+    // Remove any value equal to 0
+    const present = counts.filter((count) => count > 0);
+    if (present.length === 0) {
+        return [];
+    }
+
+    // Apply the snap directly to the lowest and highest values to align the scale boundaries
+    const lowest = snap(Math.min(...present));
+    const highest = snap(Math.max(...present));
+
+    // Edge case: if all counts are the same
+    if (lowest === highest) {
+        return [{ min: lowest, max: undefined, color: RAMP[RAMP.length - 1] }];
+    }
+
+    const numBuckets = RAMP.length;
+    const bounds: number[] = [];
+
+    // Logarithmic distribution
+    // Using 'highest + 1' consistently ensures the absolute maximum value falls inside the last bucket
+    const logMin = Math.log(lowest);
+    const logMax = Math.log(highest + 1);
+    const step = (logMax - logMin) / numBuckets;
+
+    for (let i = 0; i <= numBuckets; i++) {
+        const rawBound = Math.exp(logMin + i * step);
+        const snapped = snap(rawBound);
+
+        // Prevent duplicate bounds caused by rounding consecutive values
+        if (bounds.length === 0 || snapped > bounds[bounds.length - 1]) {
+            bounds.push(snapped);
+        }
+    }
+
+    // Ensure the final boundary is always high enough to cover the highest value
+    if (bounds[bounds.length - 1] <= highest) {
+        bounds[bounds.length - 1] = highest + 1;
+    }
+
+    // Generate the buckets from lowest to highest
+    const buckets: Bucket[] = [];
+    for (let i = 0; i < bounds.length - 1; i++) {
+        const min = bounds[i];
+        const nextMin = bounds[i + 1];
+
+        // Since we are dealing with integers, max is the next minimum minus 1
+        const max = nextMin - 1;
+
+        // Distribute available colors from RAMP proportionally across the generated buckets
+        const colorIndex = Math.floor((i / (bounds.length - 1)) * RAMP.length);
+        const color = RAMP[Math.min(colorIndex, RAMP.length - 1)];
+
+        buckets.push({ min, max, color });
+    }
+
+    // Adjust the final bucket to capture everything 'and above' (max === undefined)
+    if (buckets.length > 0) {
+        buckets[buckets.length - 1].max = undefined;
+    }
+
+    // Reverse the array so the highest counts (and darkest colors) appear first for the map legend
+    return buckets.reverse();
+}
+
+function colorFor(count: number, buckets: Bucket[]): string {
+    return buckets.find((bucket) => count >= bucket.min)?.color ?? EMPTY_COLOR;
+}
+
+function styleFor(count: number, isSelected: boolean, buckets: Bucket[]): L.PathOptions {
     return {
-        fillColor: colorFor(count),
+        fillColor: colorFor(count, buckets),
         fillOpacity: count > 0 ? 0.85 : 0.55,
         color: isSelected ? SELECTED_COLOR : '#ffffff',
         weight: isSelected ? 2.5 : 0.5,
@@ -61,6 +125,10 @@ export default function MunicipalityMap() {
 
     const countByValue = useMemo(
         () => new Map(counts.map((count) => [count.value, count.count])),
+        [counts]);
+
+    const buckets = useMemo(
+        () => bucketsFor(counts.map((count) => count.count)),
         [counts]);
 
     // Values the backend knows but the 1984 boundaries don't: the `onbekend`
@@ -100,9 +168,7 @@ export default function MunicipalityMap() {
         const map = L.map(containerRef.current, {
             preferCanvas: true,
             boxZoom: false,
-            attributionControl: false,
-            // Without this fitBounds rounds down to a whole zoom level, which
-            // can leave the country half a level smaller than the frame allows.
+            attributionControl: true,
             zoomSnap: 0.25,
         }).fitBounds(NETHERLANDS);
         mapRef.current = map;
@@ -122,7 +188,7 @@ export default function MunicipalityMap() {
 
         const shapes = shapesRef.current;
         const layer = L.geoJSON(gemeenten.map((gemeente) => gemeente.feature), {
-            style: styleFor(0, false),
+            style: styleFor(0, false, []),
             onEachFeature: (_feature, shape) => shape.bindTooltip('', {sticky: true}),
         }).addTo(map);
 
@@ -152,10 +218,10 @@ export default function MunicipalityMap() {
             if (!shape) return;
 
             const count = countByValue.get(gemeente.value) ?? 0;
-            shape.setStyle(styleFor(count, selected.has(gemeente.value)));
+            shape.setStyle(styleFor(count, selected.has(gemeente.value), buckets));
             shape.setTooltipContent(`<b>${gemeente.name}</b><br/>${t('gemeenteMap.tooltip', {count})}`);
         });
-    }, [countByValue, gemeenten, selected, t]);
+    }, [buckets, countByValue, gemeenten, selected, t]);
 
     // Dragging out an area replaces the selection — that is what picking an
     // area means; individual municipalities keep toggling on click.
@@ -216,10 +282,12 @@ export default function MunicipalityMap() {
                     </button>
                 )}
                 <ul className={classes.legend}>
-                    {BUCKETS.map((bucket) => (
+                    {buckets.map((bucket) => (
                         <li key={bucket.min}>
                             <span className={classes.swatch} style={{background: bucket.color}}/>
-                            {t(bucket.labelKey)}
+                            {bucket.max === undefined
+                                ? t('gemeenteMap.legend.from', {min: bucket.min})
+                                : t('gemeenteMap.legend.range', {min: bucket.min, max: bucket.max})}
                         </li>
                     ))}
                 </ul>
