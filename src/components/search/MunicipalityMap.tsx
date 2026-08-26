@@ -24,7 +24,7 @@ interface Bucket {
 
 const snap = (val: number) => Math.round(val);
 
-function bucketsFor(counts: number[]): Bucket[] {
+const bucketsFor = (counts: number[]): Bucket[] => {
     // Remove any value equal to 0
     const present = counts.filter((count) => count > 0);
     if (present.length === 0) {
@@ -89,11 +89,11 @@ function bucketsFor(counts: number[]): Bucket[] {
     return buckets.reverse();
 }
 
-function colorFor(count: number, buckets: Bucket[]): string {
+const colorFor = (count: number, buckets: Bucket[]): string => {
     return buckets.find((bucket) => count >= bucket.min)?.color ?? EMPTY_COLOR;
 }
 
-function styleFor(count: number, isSelected: boolean, buckets: Bucket[]): L.PathOptions {
+const styleFor = (count: number, isSelected: boolean, buckets: Bucket[]): L.PathOptions => {
     return {
         fillColor: colorFor(count, buckets),
         fillOpacity: count > 0 ? 0.85 : 0.55,
@@ -102,7 +102,7 @@ function styleFor(count: number, isSelected: boolean, buckets: Bucket[]): L.Path
     };
 }
 
-export default function MunicipalityMap() {
+const MunicipalityMap = () => {
     const {t} = useTranslate();
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<L.Map | null>(null);
@@ -298,3 +298,5 @@ export default function MunicipalityMap() {
         </section>
     );
 }
+
+export default MunicipalityMap;

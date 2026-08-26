@@ -8,7 +8,6 @@ import '@knaw-huc/panoptes-react-blocks/style.css';
 import './css/theme.css';
 import './css/index.css';
 
-
 const panoptesUrl = '$VITE_PANOPTES_URL';
 const panoptesIsEmbedded = '$VITE_PANOPTES_IS_EMBEDDED';
 const panoptesSearchPath = '$VITE_PANOPTES_SEARCH_PATH';
@@ -19,6 +18,13 @@ const getVar = (envVariable: string): string | undefined =>
     envVariable.startsWith('$VITE_')
         ? (envVariable.slice(1) in import.meta.env ? import.meta.env[envVariable.slice(1)] : undefined)
         : envVariable;
+
+if (window.location.pathname === '/') {
+    const dataset = getVar(panoptesDataset);
+    const searchPath = getVar(panoptesSearchPath);
+    const target = searchPath?.replace('$dataset', dataset ?? '') ?? `/${dataset}/search`;
+    window.location.replace(target);
+}
 
 const root = createPanoptesRoot<SportSearchResultItem>(document.getElementById('root')!, {
     url: getVar(panoptesUrl),
