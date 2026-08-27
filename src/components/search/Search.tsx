@@ -1,5 +1,7 @@
+import {Suspense} from 'react';
 import {useRouter} from '@tanstack/react-router';
 import {
+    Facet as FacetShell,
     FacetedSearch,
     FacetsSection,
     getReadableRange,
@@ -69,7 +71,15 @@ function SearchFacets() {
         <div className={classes.facets}>
             <FacetsSection>
                 <HookedSearchFacet/>
-                {facets.map((facet) => <FacetRendering key={facet.property} facet={facet}/>)}
+                {/* Use suspense on the facets here, to avoid reloading the entire page when clicking facets and/or the map.
+                    aka, 'One kid needs to tie their shoe, so that one kid sits down for a second — instead of the
+                          entire class stopping and going back to the start.' */}
+                {facets.map((facet) => (
+                    <Suspense key={facet.property}
+                              fallback={<FacetShell label={facet.name} startOpen={facet.startOpen}><div/></FacetShell>}>
+                        <FacetRendering facet={facet}/>
+                    </Suspense>
+                ))}
             </FacetsSection>
         </div>
     );
