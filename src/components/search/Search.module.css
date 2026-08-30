@@ -37,3 +37,11 @@
         gap: 2.5rem;
     }
 }
+
+/* Below 64rem, the library renders the facets panel as an absolutely positioned overlay
+   without a z-index, so Leaflet (panes at 400, controls at 1000) paints over it. */
+@media (width < 64rem) {
+    .facets > section {
+        z-index: 1100;
+    }
+}

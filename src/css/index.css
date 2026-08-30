@@ -1,7 +1,10 @@
 /* Override CSS based on selectors using substrings - this is something we need to look at for future projects */
 /* Header and top-level nav */
 header > [class*="_content_"] {
-    justify-content: flex-between;
+    /* The library stacks this into a column below 48rem; keep branding and nav on one row. */
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     max-width: none;
     margin-inline: 0;
 }
@@ -29,8 +32,16 @@ div [class*="_branding_"] {
     align-items: center;
 }
 
-header [class*="_navigation_"] > :last-child {
-    margin-left: auto;
+/* Detail page — stop the property rows overflowing on narrow viewports.
+   Two separate floors were forcing the content wider than its container:
+   the UA default min-inline-size on fieldset, and the library's min-width on
+   the property list (which nested sub-lists inherit as well). */
+main fieldset {
+    min-inline-size: 0;
+}
+
+main dl[class*="_list_"] {
+    min-width: min(24rem, 100%);    /* Keep the 24rem floor when it fits, shrink when it doesn't */
 }
 
 /* Result card — scoped to Panoptes ResultCard (has _link_), not dataset cards */
