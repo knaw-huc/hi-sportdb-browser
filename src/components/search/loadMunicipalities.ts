@@ -42,12 +42,8 @@ interface GemeenteProperties {
     gm_naam: string;
 }
 
-// Lowercase, drop diacritics and everything that isn't a letter or digit.
 function normalize(name: string): string {
-    return name.normalize('NFKD')
-        .replace(/\p{Diacritic}/gu, '')
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, '');
+    return name;
 }
 
 // The
@@ -73,8 +69,6 @@ export async function loadMunicipalities(): Promise<Gemeente[]> {
     const collection = await response.json() as FeatureCollection<Polygon | MultiPolygon, GemeenteProperties>;
     return collection.features.map((feature) => {
         const name = feature.properties.gm_naam;
-        // Check if the municipality name is one of the exceptions and use the mapping if so, otherwise normalize
-        // the mun. name.
         return {
             value: FACET_VALUE_BY_NAME[name] ?? normalize(name),
             name,
